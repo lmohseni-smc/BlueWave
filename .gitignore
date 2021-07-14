@@ -13,3 +13,10 @@ nb-configuration.xml
 *.dll
 **/test.html*
 **/!README.TXT
+
+*.iml
+
+.classpath
+.idea/**
+.project
+.settings/**

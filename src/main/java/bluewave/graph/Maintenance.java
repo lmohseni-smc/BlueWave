@@ -1,125 +1,130 @@
 package bluewave.graph;
 
-import java.util.*;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
-import static javaxt.utils.Console.*;
-
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Result;
 import org.neo4j.driver.Session;
 
-//******************************************************************************
-//**  Maintenance Class
-//******************************************************************************
-/**
- *   Provides static methods used to clean-up the database
- *
- ******************************************************************************/
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import static javaxt.utils.Console.console;
+
+// ******************************************************************************
+// **  Maintenance Class
+// ******************************************************************************
+/**
+ * Provides static methods used to clean-up the database
+ *
+ * <p>****************************************************************************
+ */
 public class Maintenance {
 
+  // **************************************************************************
+  // ** createIndex
+  // **************************************************************************
+  /** Used to create an index for a property on a node */
+  public static void createIndex(String nodeName, String columnName, Neo4J graph) throws Exception {
 
-  //**************************************************************************
-  //** createIndex
-  //**************************************************************************
-  /** Used to create an index for a property on a node
-   */
-    public static void createIndex(String nodeName, String columnName, Neo4J graph) throws Exception {
-
-        String indexName = "idx_" + nodeName + "_" + columnName;
-        Session session = null;
-        try{
-            session = graph.getSession();
-            String cmd = "CREATE INDEX " + indexName + " IF NOT EXISTS FOR (n:" + nodeName + ") ON (";
-            cmd += "n." + columnName;
-            cmd += ")";
-            session.run(cmd);
-            session.close();
-            console.log("Successfully created index: " + indexName);
-        }
-        catch(Exception e){
-            if (session!=null) session.close();
-            throw e;
-        }
+    String indexName = "idx_" + nodeName + "_" + columnName;
+    Session session = null;
+    try {
+      session = graph.getSession();
+      String cmd = "CREATE INDEX " + indexName + " IF NOT EXISTS FOR (n:" + nodeName + ") ON (";
+      cmd += "n." + columnName;
+      cmd += ")";
+      session.run(cmd);
+      session.close();
+      console.log("Successfully created index: " + indexName);
+    } catch (Exception e) {
+      if (session != null) session.close();
+      throw e;
     }
+  }
 
-
-  //**************************************************************************
-  //** deleteNodes
-  //**************************************************************************
-  /** Used to delete nodes from the graph
-   *  @param nodeName Name of a node to delete (e.g "hospital_capacity").
-   *  Accepts wildcard filters (e.g "hospital_*")
+  // **************************************************************************
+  // ** deleteNodes
+  // **************************************************************************
+  /**
+   * Used to delete nodes from the graph
+   *
+   * @param nodeName Name of a node to delete (e.g "hospital_capacity"). Accepts wildcard filters
+   *     (e.g "hospital_*")
    */
-    public static void deleteNodes(String nodeName, Neo4J graph) throws Exception {
-        Pattern regex = Pattern.compile(getRegEx(nodeName), Pattern.CASE_INSENSITIVE);
-        Session session = null;
-        try{
-            session = graph.getSession();
+  public static void deleteNodes(String nodeName, Neo4J graph) throws Exception {
+    Pattern regex = Pattern.compile(getRegEx(nodeName), Pattern.CASE_INSENSITIVE);
+    Session session = null;
+    try {
+      session = graph.getSession();
 
-            ArrayList<String> nodes = new ArrayList<>();
-            Result rs = session.run("MATCH (n) RETURN distinct labels(n)");
-            while (rs.hasNext()){
-                Record r = rs.next();
-                List labels = r.get(0).asList();
-                if (labels.isEmpty()) continue; //?
-                String label = labels.get(0).toString();
-                Matcher matcher = regex.matcher(label);
-                if (matcher.find()){
-                    nodes.add(label);
-                }
-            }
-
-            for (String node : nodes){
-                String cmd = "MATCH (n:" + node + ") DETACH DELETE n";
-                console.log(cmd);
-                session.run(cmd);
-            }
-
-            session.close();
+      ArrayList<String> nodes = new ArrayList<>();
+      Result rs = session.run("MATCH (n) RETURN distinct labels(n)");
+      while (rs.hasNext()) {
+        Record r = rs.next();
+        List labels = r.get(0).asList();
+        if (labels.isEmpty()) continue; // ?
+        String label = labels.get(0).toString();
+        Matcher matcher = regex.matcher(label);
+        if (matcher.find()) {
+          nodes.add(label);
         }
-        catch(Exception e){
-            if (session!=null) session.close();
-            throw e;
-        }
+      }
+
+      for (String node : nodes) {
+        String cmd = "MATCH (n:" + node + ") DETACH DELETE n";
+        console.log(cmd);
+        session.run(cmd);
+      }
+
+      session.close();
+    } catch (Exception e) {
+      if (session != null) session.close();
+      throw e;
     }
+  }
 
-
-  //**************************************************************************
-  //** getRegEx
-  //**************************************************************************
-  /** Used to convert a wildcard (e.g. "*.txt") into a regular expression.
-   *  Credit: https://www.rgagnon.com/javadetails/java-0515.html
+  // **************************************************************************
+  // ** getRegEx
+  // **************************************************************************
+  /**
+   * Used to convert a wildcard (e.g. "*.txt") into a regular expression. Credit:
+   * https://www.rgagnon.com/javadetails/java-0515.html
    */
-    private static String getRegEx(String wildcard){
-        wildcard = wildcard.trim();
-        StringBuffer s = new StringBuffer(wildcard.length());
-        s.append('^');
-        for (int i = 0, is = wildcard.length(); i < is; i++) {
-            char c = wildcard.charAt(i);
-            switch(c) {
-                case '*':
-                    s.append(".*");
-                    break;
-                case '?':
-                    s.append(".");
-                    break;
-                    // escape special regexp-characters
-                case '(': case ')': case '[': case ']': case '$':
-                case '^': case '.': case '{': case '}': case '|':
-                case '\\':
-                    s.append("\\");
-                    s.append(c);
-                    break;
-                default:
-                    s.append(c);
-                    break;
-            }
-        }
-        s.append('$');
-        return(s.toString());
+  private static String getRegEx(String wildcard) {
+    wildcard = wildcard.trim();
+    StringBuffer s = new StringBuffer(wildcard.length());
+    s.append('^');
+    for (int i = 0, is = wildcard.length(); i < is; i++) {
+      char c = wildcard.charAt(i);
+      switch (c) {
+        case '*':
+          s.append(".*");
+          break;
+        case '?':
+          s.append(".");
+          break;
+          // escape special regexp-characters
+        case '(':
+        case ')':
+        case '[':
+        case ']':
+        case '$':
+        case '^':
+        case '.':
+        case '{':
+        case '}':
+        case '|':
+        case '\\':
+          s.append("\\");
+          s.append(c);
+          break;
+        default:
+          s.append(c);
+          break;
+      }
     }
-
+    s.append('$');
+    return (s.toString());
+  }
 }
