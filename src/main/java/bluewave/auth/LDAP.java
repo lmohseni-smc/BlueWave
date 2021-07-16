@@ -8,9 +8,9 @@ import static javaxt.utils.Console.*;
 
 public class LDAP {
 
-    private int port = 389;
-    private String host;
-    private String dc;
+    int port = 389;
+    String host;
+    String dc;
 
 
   //**************************************************************************

@@ -36,6 +36,8 @@ dependencies {
     implementation 'javax.vecmath:vecmath:1.5.2'
     implementation 'org.jgrapht:jgrapht-core:1.0.0'
     implementation 'com.github.jsqlparser:jsqlparser:4.1'
+    implementation 'junit:junit:4.13.1'
+    implementation 'org.junit.jupiter:junit-jupiter:5.7.0'
 }
 
 group = 'bluewave'
