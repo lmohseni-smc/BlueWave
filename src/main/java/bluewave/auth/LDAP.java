@@ -1,16 +1,17 @@
 package bluewave.auth;
 
-import java.util.*;
-import javax.naming.*;
+import javax.naming.Context;
 import javax.naming.ldap.InitialLdapContext;
-import static javaxt.utils.Console.*;
+import java.util.Properties;
+
+import static javaxt.utils.Console.console;
 
 
 public class LDAP {
 
-    private int port = 389;
-    private String host;
-    private String dc;
+    int port = 389;
+    String host;
+    String dc;
 
 
   //**************************************************************************
