@@ -63,7 +63,7 @@ sonarqube {
         property 'sonar.organization', 'lmohseni-smc'
         property 'sonar.projectKey', 'lmohseni-smc_BlueWave'
         property 'sonar.sources', 'src/main/,web/'
-        property 'sonar.exclusions', 'src/test/,web/lib/**/*'
+        property 'sonar.exclusions', 'src/test/**/*,web/lib/**/*,web/data/**/*'
     }
 }
 
