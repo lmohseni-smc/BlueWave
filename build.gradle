@@ -86,6 +86,12 @@ jar {
     }
 }
 
+shadowJar {
+    archiveBaseName.set('bluewave')
+    archiveClassifier.set('')
+    archiveVersion.set('0.1.0')
+}
+
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
