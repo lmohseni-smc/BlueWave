@@ -62,6 +62,7 @@ sonarqube {
         property 'sonar.host.url', 'https://sonarcloud.io'
         property 'sonar.organization', 'lmohseni-smc'
         property 'sonar.projectKey', 'lmohseni-smc_BlueWave'
+        property 'sonar.sources', '.'
     }
 }
 
