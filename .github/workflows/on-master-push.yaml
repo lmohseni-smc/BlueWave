@@ -1,4 +1,4 @@
-name: Runs On Push to Master
+name: Run On Push to Master
 on:
   push:
     branches:
@@ -45,15 +45,12 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: Build with Gradle
-        run: ./gradlew build
-      - name: Archive production artifacts
+        run: ./gradlew shadowJar
+      - name: Archive distribution
         uses: actions/upload-artifact@v2
         with:
+          name: distribution
           path: |
-            build/libs/bluewave-*.jar
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v2
-        with:
-          name: code-coverage-report
-          path: |
-            build/reports/jacoco/test/html
+            build/libs/bluewave.jar
+            web
+            models
