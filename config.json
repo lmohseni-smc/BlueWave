@@ -1,0 +1,35 @@
+{
+    "database" : {
+        "driver" : "H2",
+        "path" : "data/database",
+        "schema" : "models/Database.sql",
+        "maxConnections" : 25
+    },
+
+    "graph" : {
+        "host" : "localhost:7687",
+        "username" : "neo4j",
+        "password" : "password"
+    },
+
+    "ldap" : {
+        "host" : "localhost:389",
+        "domain" : "my.domain.com"
+    },
+
+    "webserver" : {
+        "webDir" : "web",
+        "logDir" : "",
+        "jobDir" : "temp",
+        "keystore" : "",
+        "keypass" : "",
+        "port": 8080
+    },
+
+    "google" : {
+        "maps": {
+            "account": "peter.borissow@kartographia.com",
+            "key" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        }
+    }
+}

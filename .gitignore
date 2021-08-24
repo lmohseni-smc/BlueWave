@@ -6,7 +6,6 @@ web/branding/
 web/test/
 web/images/thumbnails/
 
-[Cc]onfig.json
 nb-configuration.xml
 
 *.DS_Store
