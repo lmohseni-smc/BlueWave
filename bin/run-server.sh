@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-CONFIG_PATH="../config.json"
+CONFIG_PATH="./config.json"
 JAR_FILE=bluewave.jar
 
 cp ./build/libs/${JAR_FILE} .
