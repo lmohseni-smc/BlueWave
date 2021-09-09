@@ -54,3 +54,5 @@ jobs:
             build/libs/bluewave.jar
             web
             models
+            config.json
+            bin/run-server.sh
