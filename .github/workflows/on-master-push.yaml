@@ -44,13 +44,23 @@ jobs:
           distribution: 'adopt'
       - name: Build jar
         run: mvn --batch-mode install verify -X -U
+      - name: copy jar
+        uses: canastro/copy-file-action@master
+        with:
+          source: "target/bluewave-1.0.0.jar"
+          target: "bluewave.jar"
+      - name: copy lib
+        uses: canastro/copy-file-action@master
+        with:
+          source: "target/lib"
+          target: "lib"
       - name: Archive distribution
         uses: actions/upload-artifact@v2
         with:
           name: distribution
           path: |
-            target/bluewave*.jar
-            target/lib
+            bluewave.jar
+            lib
             web
             models
             config.json
