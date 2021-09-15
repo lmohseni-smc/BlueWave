@@ -43,7 +43,7 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Build jar
-        run: mvn --batch-mode install verify -U
+        run: mvn --batch-mode install verify -XU
       - name: Archive distribution
         uses: actions/upload-artifact@v2
         with:
