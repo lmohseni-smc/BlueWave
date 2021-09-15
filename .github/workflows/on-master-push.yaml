@@ -33,7 +33,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew build sonarqube --info
   build:
-    name: Gradle Build
+    name: Create Artifact
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -42,11 +42,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
-      - name: Build with Gradle
-        run: ./gradlew shadowJar
-      - name: Build jar with dependencies
+      - name: Build jar
         run: mvn --batch-mode install verify -U
       - name: Archive distribution
         uses: actions/upload-artifact@v2
