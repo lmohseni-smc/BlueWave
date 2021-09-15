@@ -45,15 +45,9 @@ jobs:
       - name: Build jar
         run: mvn --batch-mode install verify -X -U
       - name: copy jar
-        uses: canastro/copy-file-action@master
-        with:
-          source: "target/bluewave-1.0.0.jar"
-          target: "bluewave.jar"
-      - name: copy lib
-        uses: canastro/copy-file-action@master
-        with:
-          source: "target/lib"
-          target: "lib"
+        run: |
+          cp target/bluewave-1.0.0.jar bluewave.jar
+          cp -r target/lib lib
       - name: Archive distribution
         uses: actions/upload-artifact@v2
         with:
