@@ -46,13 +46,15 @@ jobs:
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: Build with Gradle
         run: ./gradlew shadowJar
+      - name: Build jar with dependencies
+        run: mvn --batch-mode install verify -U
       - name: Archive distribution
         uses: actions/upload-artifact@v2
         with:
           name: distribution
           path: |
-            build/libs/bluewave.jar
+            target/bluewave*.jar
+            target/lib
             web
             models
             config.json
-            bin/run-server.sh
